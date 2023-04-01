@@ -37,10 +37,11 @@ def preprocess_image(imgpath = "raw_imgs/macaron.png", outputpath = "cleared_img
     shade_sharp = blacken_image(original_image)
     shade = cv2.GaussianBlur(shade_sharp,(11,11),2,2)#blurring process
     image_with_shade = add_shade(original_image,shade,stride=(6,6))#choose number close to half of the (n,n) above.
-    plt.imshow(image_with_shade)
-    plt.savefig(outputpath)
     # img_obj = Image.fromarray((image_with_shade*255)//1, "RGB")
     # img_obj.save(outputpath)
+    img_obj=Image.fromarray((image_with_shade*255).astype(np.uint8),mode = "RGBA")
+    img_obj.save(outputpath)
+
     return image_with_shade#numpy array
     
 def main():
