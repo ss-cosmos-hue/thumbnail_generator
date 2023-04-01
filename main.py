@@ -7,8 +7,8 @@ import os
 
 # Remove background
 try:
-    os.makedirs('./output')
-    os.makedirs('./thumbnails')
+    os.makedirs('output')
+    os.makedirs('thumbnails')
 except OSError:
     pass
 
