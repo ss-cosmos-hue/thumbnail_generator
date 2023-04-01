@@ -1,27 +1,32 @@
 from PIL import Image, ImageDraw, ImageFont
+from rembg import remove
+from FaceDetectionInfo import bottom_value_decider
+from FaceCropper import crop
 
-# Load centerpiece image
-centerpiece_image = Image.open('mario.png').convert('RGBA')
+# Remove background
+input_path = 'penguin.png'
+output_path = 'removed_bg.png'
 
-# Convert image to alpha channel
-alpha = Image.new('RGBA', centerpiece_image.size, (0, 0, 0, 0))
-alpha_draw = ImageDraw.Draw(alpha)
-alpha_draw.rectangle((0, 0, centerpiece_image.size[0], centerpiece_image.size[1]), fill=(255, 255, 255, 255))
-alpha.paste(centerpiece_image, mask=centerpiece_image)
+input = Image.open(input_path)
+output = remove(input)
+output.save(output_path)
 
-# Save new centerpiece image with alpha channel
-centerpiece_image = alpha.convert('RGBA')
-centerpiece_image.save('mario_alpha.png')
+image_path = output_path
+
+# Crop filler
+crop(bottom_value_decider(image_path), image_path)
+image_path = 'cropped.png'
 
 # Load saved image
-centerpiece_image = Image.open('mario_alpha.png').convert('RGBA')
+centerpiece_image = Image.open(image_path).convert('RGBA')
 
 # Create new thumbnail image
 thumbnail_image = Image.new('RGB', (1280, 720), (255, 255, 255))
 
 # Determine centerpiece size and position
 centerpiece_width = int(thumbnail_image.width / 2)
-centerpiece_height = int((centerpiece_image.height / centerpiece_image.width) * centerpiece_width)
+#centerpiece_height = int((centerpiece_image.height / centerpiece_image.width) * centerpiece_width)
+centerpiece_height = int(thumbnail_image.height)
 centerpiece_x = 0
 centerpiece_y = 0
 
@@ -39,7 +44,6 @@ text_height = thumbnail_image.height
 draw = ImageDraw.Draw(thumbnail_image)
 font = ImageFont.truetype('/System/Library/Fonts/Supplemental/arial.ttf', size=36)
 
-# Split text into lines based on newline character
 text_lines = "Hi I'm Mario".split('\n')
 
 # Determine maximum font size for text
