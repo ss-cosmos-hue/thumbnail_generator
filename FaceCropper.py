@@ -2,7 +2,7 @@
 def crop(percent_bottom, image_path):
     # Importing Image class from PIL module
     from PIL import Image
-    
+    OUTPUT_PATH = 'output/cropped.png'
     # Opens a image in RGB mode
     im = Image.open(image_path)
     
@@ -12,7 +12,7 @@ def crop(percent_bottom, image_path):
     
     # Check if the FaceDetector detected no info. If it detected no info, percent_bottom will be -3249429594509234095243095, since that's what I set the default to in FaceDetectionInfo.bottom_value_decider()
     if (percent_bottom == -3249429594509234095243095):
-        im.save('cropped.png')
+        im.save(OUTPUT_PATH)
         return 
 
     # Setting the points for cropped image
@@ -30,7 +30,7 @@ def crop(percent_bottom, image_path):
     # Shows the image in image viewer
     #im1.show()
 
-    im1.save('cropped.png')
+    im1.save(OUTPUT_PATH)
 
 #crop(0.38673246)
 

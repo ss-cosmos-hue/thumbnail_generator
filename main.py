@@ -3,8 +3,15 @@ from rembg import remove
 from FaceDetectionInfo import bottom_value_decider
 from FaceCropper import crop
 import numpy as np
+import os
 
 # Remove background
+try:
+    os.makedirs('./output')
+    os.makedirs('./thumbnails')
+except OSError:
+    pass
+
 input_path = 'images/luigi.png'
 output_path = 'output/removed_bg.png'
 
@@ -15,7 +22,7 @@ def shift_contrast(im: Image, color = None):
     if color is None:
         r1, g1, b1 = 0, 0, 0  # Original value
         pixels = set([i for i in im.getdata()])
-        all_colors = list(np.ndindex((255, 255, 255)))
+        all_colors = list(np.ndindex((200, 200, 200)))
         non_colors = []
         i = len(all_colors)-1
         while len(non_colors) < 10 and i > 0:
@@ -43,9 +50,9 @@ def transfer_to_blank_canvas(im: Image, model: Image):
 
 input = Image.open(input_path).convert('RGBA')
 intermediate, color = shift_contrast(input)
-intermediate.save("output/shifted.png")
+# intermediate.save("output/shifted.png")
 intermediate = intermediate.filter(ImageFilter.FIND_EDGES)
-intermediate.save("output/outline.png")
+# intermediate.save("output/outline.png")
 ImageDraw.floodfill(intermediate, xy=(0, 0), value=color)
 intermediate.paste(input, (0, 0), input)
 output = remove(intermediate)
@@ -56,7 +63,7 @@ image_path = output_path
 
 # Crop filler
 crop(bottom_value_decider(image_path), image_path)
-image_path = 'cropped.png'
+image_path = 'output/cropped.png'
 
 # Load saved image
 centerpiece_image = Image.open(image_path).convert('RGBA')
@@ -100,4 +107,4 @@ font_size = min(max_font_size, 36)
 draw.text((text_x, text_y), '\n'.join(text_lines), fill=(0, 0, 0), font=font)
 
 # Save thumbnail image
-thumbnail_image.save('thumbnail.png')
+thumbnail_image.save('thumbnails/thumbnail.png')
