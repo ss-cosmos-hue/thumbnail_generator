@@ -1,6 +1,7 @@
 function myFunction() {
   document.getElementById("frm1").submit();
 }
+
 function WordCount(str) {
   var totalSoFar = 0;
   for (var i = 0; i < WordCount.length; i++)
@@ -9,6 +10,7 @@ function WordCount(str) {
     }
   totalsoFar += 1;
 }
+s
 function validateForm() {
   let x = document.forms["frm1"]["words"].value;
   if (x < 1 || x > 3) {
