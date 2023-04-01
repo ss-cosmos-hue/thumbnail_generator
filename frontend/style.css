@@ -1,0 +1,184 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+h1{
+  padding-top: 100px;
+  color: #4754B0;
+    text-align: center;
+    font-size: 50px;
+}
+h2{
+  margin-top: 50px;
+  margin-left: 900px;
+  font-size: 40px;
+  color: #525985
+}
+p{
+  flex: 1;
+  margin-top: 25px;
+  margin-left: 900px;
+   color: #525985;
+  margin-right: 50px;
+}
+h3{
+  float:right;
+  color: #525985;
+  margin-top: 200px;
+  font-size: 40px;
+}
+.container {
+  display: flex;
+  margin-left: 100px;
+  margin-right: 90px;
+}
+
+.content {
+  flex: 1;
+  padding-left: 60px;
+} 
+
+
+.pic{
+float:left;
+padding-top: 50px;
+padding-left: 150px;
+}
+
+
+.typewriter h1 {
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: .15em solid green; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+  letter-spacing: .15em; /* Adjust as needed */
+  animation: 
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #2E3355; }
+}
+#audio{
+    top:800px;
+    padding-left: 100px;
+    margin-right: 499px;
+    position: relative;
+  
+}
+.fade-in {
+  animation: fadeIn ease 2s;
+  -webkit-animation: fadeIn ease 2s;
+  -moz-animation: fadeIn ease 2s;
+  -o-animation: fadeIn ease 2s;
+  -ms-animation: fadeIn ease 2s;
+}
+@keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+ul {list-style-type: none;}
+
+
+.video-container{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-left: 100px;
+  margin-right: 90px;
+}
+
+.video-container .video{
+  height: 16rem;
+  width: 20rem;
+  margin: 2rem;
+  box-shadow: 0.5rem 1rem rgba(0,0,0,.5);
+  overflow: hidden;
+  border-radius: 1rem;
+
+}
+
+.video-container .video video{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+.video-player{
+  width: 80%;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  height: ;
+  transform: translate(-50%, -50%);
+  display: none;
+} 
+
+video:focus{
+  outline: none;
+}
+
+.close-btn{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+}
+
+.row{
+  margin:30px;
+}
+.carousel slide{
+  margin:30px;
