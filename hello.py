@@ -1,8 +1,10 @@
 from flask import Flask, request, send_file, flash, redirect
 from werkzeug.utils import secure_filename
 import os
+import sys
 
-from pkgs import start
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pkgs'))
+from pkgs.generate import start
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'input')

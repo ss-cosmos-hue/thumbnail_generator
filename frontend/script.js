@@ -1,5 +1,5 @@
-function myFunction() {
-  document.getElementById("frm1").submit();
+function handleClick() {
+  console.log("hello world")
 }
 
 function WordCount(str) {

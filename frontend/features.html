@@ -8,8 +8,6 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
   </head>
 
   <style>
@@ -52,7 +50,7 @@
         <form id="form2">
           <label for="img">Select image:</label>
           <input type="file" id="img-upload" name="img" accept="image/*" />
-          <input type="button" py-click="processImg()" value="Submit" />
+          <input type="button" onclick="handleClick()" value="Submit" />
         </form>
         <br /><br /><br />
         <div class="container">
@@ -136,6 +134,7 @@
                       integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
                       crossorigin="anonymous"
                     ></script>
+                    <script src="script.js"></script>
                   </div>
                 </div>
               </div>
@@ -144,18 +143,5 @@
         </div>
       </div>
     </div>
-    <py-script>
-      from js import console
-      from pyscript import Element
-      from PIL import Image
-
-      def processImg():
-        files = Element("img-upload").element.files.to_py()
-        for file in files:
-          console.log(file)
-          img = Image.open(file)
-          img.show()
-        
-    </py-script>
   </body>
 </html>

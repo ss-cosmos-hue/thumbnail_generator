@@ -5,7 +5,6 @@ from FaceCropper import crop
 import numpy as np
 import os
 
-# Remove background
 try:
     os.makedirs('output')
     os.makedirs('thumbnails')
