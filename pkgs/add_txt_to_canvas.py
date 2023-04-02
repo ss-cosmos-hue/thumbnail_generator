@@ -51,14 +51,14 @@ def add_txt_to_canvas(canvas, output_path,
     # font size determination
     while np.abs(l-r) < breakpoint_ws[i]*filling_ratio and np.abs(t-b) < breakpoint_h*filling_ratio:
         # iterate until the text size is just larger than the criteria
-        fontsize += 2
+        fontsize += 1
         font = ImageFont.truetype("Arial.ttf", fontsize)
         l, t, r, b = font.getbbox(word)
         font = ImageFont.truetype("Arial.ttf", fontsize-2)
 
     height_unit = np.abs(t-b)
-    heights = (np.linspace(canvas_h//2-numrow*height_unit//2, canvas_h//2 -
-               numrow*height_unit//2+numrow*height_unit, num=numrow)).astype(np.int16)
+    heights = (np.linspace(canvas_h//2 - numrow*height_unit//2, canvas_h//2 -
+               numrow*height_unit//2 + numrow*height_unit, num=numrow)).astype(np.int16)
 
     for i in range(numrow):
         word = words[i]

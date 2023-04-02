@@ -18,8 +18,7 @@ def add_shade(org_image, shade, stride=(2, 2)):
     expanded = np.zeros((h_org+h_str, w_org+w_str, 4))
     org_image_copy = np.copy(org_image)
     expanded[-h_org:, -w_org:] = np.copy(shade)
-    expanded[:h_org, :w_org][org_image_copy[..., -1] >
-                             0] = org_image_copy[org_image_copy[..., -1] > 0]
+    expanded[:h_org, :w_org][org_image_copy[..., -1] > 0.8] = org_image_copy[org_image_copy[..., -1] > 0.8]
 
     return expanded
 
@@ -35,7 +34,7 @@ def preprocess_image(imgpath):
     return cropped_image
 
 
-def shadow_adder(scaled_image, output_path="shadow.png"):
+def shadow_adder(scaled_image):
     # make sure that (0...1) scale is used
     image_array = np.array(scaled_image)
     if np.issubdtype(image_array.dtype, np.integer):
@@ -50,9 +49,8 @@ def shadow_adder(scaled_image, output_path="shadow.png"):
     # img_obj.save(outputpath)
     img_obj = Image.fromarray(
         (image_with_shade*255).astype(np.uint8), mode="RGBA")
-    img_obj.save(output_path)
 
-    return image_with_shade
+    return img_obj
 
 
 def main():
