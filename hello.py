@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS
 import os
 import sys
-import time
+import shutil
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'pkgs'))
 from pkgs.generate import start
@@ -33,6 +33,11 @@ def generate():
             input_path = os.path.join(UPLOAD_FOLDER, filename)
             file.save(input_path)
             start(input_path, text)
+
+            # clear input folder
+            shutil.rmtree(UPLOAD_FOLDER)
+            os.makedirs(UPLOAD_FOLDER)
+
             return jsonify({'status': 'success'}), 200
         except Exception as e:
             print(e)
