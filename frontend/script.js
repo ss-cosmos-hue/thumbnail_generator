@@ -1,20 +1,37 @@
-function handleClick() {
-  console.log("hello world")
-}
-
-function WordCount(str) {
-  var totalSoFar = 0;
-  for (var i = 0; i < WordCount.length; i++)
-    if (str(i) === " ") {
-      totalSoFar = +1;
+async function handleClick() {
+  img = document.getElementById("img-upload").files[0];
+  if (img) {
+    imgTextEl = document.getElementById("img-text");
+    textValue = imgTextEl.value;
+    if (!textValue || textValue.split(" ").length > 3) {
+      alert("Fill in text or keep within 3 words");
+      return;
     }
-  totalsoFar += 1;
-}
 
-function validateForm() {
-  let x = document.forms["frm1"]["words"].value;
-  if (x < 1 || x > 3) {
-    alert("Please enter a phrase between 1-3 words");
-    return false;
+    let formData = new FormData();
+    formData.append("img", img);
+    formData.append("imgText", textValue);
+    imgTextEl.value = "Loading...";
+
+    try {
+      let response = await fetch("http://127.0.0.1:5000/generate", {
+        method: "POST",
+        mode: "no-cors",
+        body: formData,
+      });
+
+      let data = await response.blob();
+      if (data && data.size > 0) {
+        const url = URL.createObjectURL(data);
+        let a = document.createElement("a");
+        a.download = "thumbnail.png";
+        a.href = url;
+        a.click();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      imgTextEl.value = "";
+    }
   }
 }

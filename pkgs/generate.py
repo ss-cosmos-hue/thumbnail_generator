@@ -6,6 +6,7 @@ import numpy as np
 import os
 
 try:
+    os.makedirs('input')
     os.makedirs('output')
     os.makedirs('thumbnails')
 except OSError:
@@ -44,7 +45,7 @@ def transfer_to_blank_canvas(im: Image, model: Image):
     img.paste(clear_image, (0, 0), clear_image)
     return img
 
-def start(input_path, output_path):
+def start(input_path, text):
     input = Image.open(input_path).convert('RGBA')
     intermediate, color = shift_contrast(input)
     # intermediate.save("output/shifted.png")
@@ -54,9 +55,9 @@ def start(input_path, output_path):
     intermediate.paste(input, (0, 0), input)
     output = remove(intermediate)
     output, _ = shift_contrast(output, color)
-    output.save(output_path)
+    output.save("output/frame.png")
 
-    image_path = output_path
+    image_path = "output/frame.png"
 
     # Crop filler
     crop(bottom_value_decider(image_path), image_path)
@@ -92,7 +93,7 @@ def start(input_path, output_path):
     font = ImageFont.truetype(
         '/System/Library/Fonts/Supplemental/arial.ttf', size=36)
 
-    text_lines = "Hi I'm Mario".split('\n')
+    text_lines = text.split('\n')
 
     # Determine maximum font size for text
     max_font_size = int(text_width / max([len(line) for line in text_lines]))

@@ -41,13 +41,11 @@
         <br />
         <h3>Try our product down below!</h3>
         <br />
-        <p></p>
-        <form id="frm1">
-          Words on the Thumbnail: <input type="text" name="words" /><br />
+        <form id="form1">
+          Words on the Thumbnail: <input type="text" id="img-text" name="words" /><br />
         </form>
         <br />
-        <p></p>
-        <form id="form2">
+        <form enctype="multipart/form-data" id="form2">
           <label for="img">Select image:</label>
           <input type="file" id="img-upload" name="img" accept="image/*" />
           <input type="button" onclick="handleClick()" value="Submit" />
