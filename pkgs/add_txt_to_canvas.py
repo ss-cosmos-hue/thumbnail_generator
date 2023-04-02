@@ -4,10 +4,10 @@ import numpy as np
 
 # place_images
 def add_txt_to_canvas(canvas, output_path,
-              filled_img_width, input_txt,
-              size_limits,
-              object_placed_left
-              ):
+                      filled_img_width, input_txt,
+                      size_limits,
+                      object_placed_left
+                      ):
     # size_limits = [width_limit for each row]
 
     canvas_w, canvas_h = canvas.size
@@ -32,24 +32,17 @@ def add_txt_to_canvas(canvas, output_path,
     narrow_row = np.argmin(props)
 
     assert 1 <= numrow <= 3
-    # assert len(size_limits) == numrow
-    # place_image()
-    # thumbnail_image = Image.new('RGB', (1280, 720), (255, 255, 255))
-    # draw = ImageDraw.Draw(thumbnail_image)
     # font = ImageFont.truetype('/System/Library/Fonts/Supplemental/arial.ttf', size=36)
     # make a blank image for the text, initialized to transparent text color
     txt = Image.new("RGBA", canvas.size, (255, 255, 255, 40))
 
     # get a font
-    # fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 40)
-    # fnt = ImageFont.load_default()
     # get a drawing context
     d = ImageDraw.Draw(txt)
 
     # draw text, half opacity
-    # draw text, full opacity
-    # d.text((100, 200), "World", font=fnt, fill=(255, 255, 255, 255))
     word = words[narrow_row]
+    # fontsize initialization
     fontsize = 1
     filling_ratio = 0.95
     font = ImageFont.truetype("Arial.ttf", fontsize)
@@ -63,13 +56,9 @@ def add_txt_to_canvas(canvas, output_path,
         l, t, r, b = font.getbbox(word)
         font = ImageFont.truetype("Arial.ttf", fontsize-2)
 
-    # heights =None
-    # if numrow == 1:
-
     height_unit = np.abs(t-b)
     heights = (np.linspace(canvas_h//2-numrow*height_unit//2, canvas_h//2 -
                numrow*height_unit//2+numrow*height_unit, num=numrow)).astype(np.int16)
-    print(heights, t-b)
 
     for i in range(numrow):
         word = words[i]
@@ -77,26 +66,20 @@ def add_txt_to_canvas(canvas, output_path,
         font = ImageFont.truetype("Arial.ttf", fontsize)
         l, t, r, b = font.getbbox(word)
 
-        print(l, r, t, b)
         if not object_placed_left:  # no meaaning
             d.text((10, heights[i]), word, font=font,
                    fill=(255, 255, 255, 200))
-            # d.text((0,0), word, font=font, fill=(255, 255, 255, 128))
 
         else:
             d.text(((canvas_w+size_limits[i]-(r-l))//2, heights[i]),
                    word, font=font, fill=(255, 255, 255, 200))
-            # d.text((0,breakpoint_h*i), word, font=font, fill=(255, 255, 255, 128))
             # offset from left, offset from top
-        # print(breakpoint_ws,breakpoint_h)
-
     out = Image.alpha_composite(canvas, txt)
     out.save(output_path)
-    #bold and defo
 
 
 def main():
-    place_txt()
+    add_txt_to_canvas()
     return
 
 
