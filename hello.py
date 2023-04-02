@@ -1,9 +1,9 @@
-from flask import Flask, request, send_file, abort, flash, redirect
+from flask import Flask, request, abort, flash, redirect, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 import os
-import io
 import sys
+import time
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'pkgs'))
 from pkgs.generate import start
@@ -28,15 +28,24 @@ def generate():
             flash('No selected file')
             return redirect(request.url)
 
-        filename = secure_filename(file.filename)
-        input_path = os.path.join(UPLOAD_FOLDER, filename)
-        file.save(input_path)
-        start(input_path, text)
         try:
-            return send_file("thumbnails/thumbnail.png", mimetype='image/png', as_attachment=True)
-        except FileNotFoundError:
-            abort(404)
+            filename = secure_filename(file.filename)
+            input_path = os.path.join(UPLOAD_FOLDER, filename)
+            file.save(input_path)
+            start(input_path, text)
+            return jsonify({'status': 'success'}), 200
+        except Exception as e:
+            print(e)
+            abort(500)
+
+
+@app.route('/thumbnail', methods=['GET'])
+def thumbnail():
+    try:
+        return send_from_directory("thumbnails", "thumbnail.png", as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

@@ -14,24 +14,16 @@ async function handleClick() {
     imgTextEl.value = "Loading...";
 
     try {
-      let response = await fetch("http://127.0.0.1:5000/generate", {
+      const response = await fetch("http://127.0.0.1:5000/generate", {
         method: "POST",
         mode: "no-cors",
         body: formData,
       });
-
-      let data = await response.blob();
-      if (data && data.size > 0) {
-        const url = URL.createObjectURL(data);
-        let a = document.createElement("a");
-        a.download = "thumbnail.png";
-        a.href = url;
-        a.click();
-      }
     } catch (error) {
       console.log(error);
     } finally {
       imgTextEl.value = "";
+      window.open("http://127.0.0.1:5000/thumbnail", "_blank").focus();
     }
   }
 }
