@@ -6,7 +6,7 @@ import sys
 import shutil
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'pkgs'))
-from pkgs.generate import start
+from pkgs.helpers import start
 
 app = Flask(__name__)
 app.secret_key = "super secret key"

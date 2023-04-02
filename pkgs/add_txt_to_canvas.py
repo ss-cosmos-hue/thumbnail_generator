@@ -1,18 +1,18 @@
-from add_image_to_canvas import add_image_to_canvas
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
 
 # place_images
-def place_txt(canvas=Image.open("canvas/canvas.png"),
-              filled_img_width=1800, inputtxt="Macaron of World!",
-              size_limits=[2432, 2369, 2352,],
-              object_placed_left=True):
+def add_txt_to_canvas(canvas, output_path,
+              filled_img_width, input_txt,
+              size_limits,
+              object_placed_left
+              ):
     # size_limits = [width_limit for each row]
 
     canvas_w, canvas_h = canvas.size
     print(canvas_h)
-    words = inputtxt.split()
+    words = input_txt.split()
     numrow = len(words)
 
     breakpoint_h = canvas_h//numrow
@@ -91,7 +91,7 @@ def place_txt(canvas=Image.open("canvas/canvas.png"),
         # print(breakpoint_ws,breakpoint_h)
 
     out = Image.alpha_composite(canvas, txt)
-    out.save("canvas/canvas_with_txt.png")
+    out.save(output_path)
     #bold and defo
 
 

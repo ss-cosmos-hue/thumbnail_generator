@@ -1,28 +1,69 @@
-#potential main code
-#includes everything
+import os
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
+
 from color_matching import color_matching
 from add_image_to_canvas import add_image_to_canvas
 from add_txt_to_canvas import add_txt_to_canvas
+from add_shadow_effect import preprocess_image, shadow_adder
+from helpers import shift_contrast, remove, crop, bottom_value_decider, upscale_image
+# from configuration import config
 
-def thumbnail_generator(inputtxt,inputpath,path_to_clearedimg,path_to_canvas_without_img, outputpath):
-    #cutout
-    #crop
-    #detection
-    #more focus
-    #size upgrade
+INTERMEDIATE_FRAME_PATH = "output/frame.png"
+
+
+def thumbnail_generator(input_txt, input_path, path_to_cleared_img, path_to_canvas_without_img, output_path):
+    # cutout
+    input = Image.open(input_path).convert('RGBA')
+    intermediate, color = shift_contrast(input)
+    intermediate = intermediate.filter(ImageFilter.FIND_EDGES)
+    ImageDraw.floodfill(intermediate, xy=(0, 0), value=color)
+    intermediate.paste(input, (0, 0), input)
+    output = remove(intermediate)
+    output, _ = shift_contrast(output, color)
+    output.save(INTERMEDIATE_FRAME_PATH)
+
+    # crop
+    image_path = "output/frame.png"
+    crop(bottom_value_decider(image_path), image_path)
+
+    # detection
+    image_path = 'output/cropped.png'
+    cropped_img = preprocess_image(image_path)
+    cropped_img.save('shadow.png')
+
+    # more focus (upscaling)
+    os.system('cp shadow.png Real-ESRGAN/inputs')
+    thumbnail_image = Image.new('RGB', (1280, 720), (255, 255, 255))
     
-    #figure out color 
-    matchcolor = color_matching(path_to_clearedimg)#cleared_imgs/macaron.png"#can be an img object
-    #add images
-    numrow_txt = len(inputtxt)
-    canvasobj,placed_left,limits,filled_img_w = add_image_to_canvas(numrow_txt,backgroundcolor=[0,0,0], inputpath=path_to_clearedimg,outputpath=path_to_canvas_without_img)
-    #add text
-    add_txt_to_canvas(canvasobj,filled_img_width=filled_img_w,inputtxt=inputtxt,size_limits=limits,object_placed_left = True)
+    centerpiece_image = Image.open(image_path).convert('RGBA')
+    _, height = centerpiece_image.size
+    ratio = thumbnail_image.height / height
+    if ratio > 1: # Only if image needs to be upscaled
+        upscale_image(str(ratio))
+    os.system('rm -r Real-ESRGAN/inputs/*') # empty the folder
 
-    return
+    # Add shadow
+    centerpiece_image = shadow_adder(Image.open('Real-ESRGAN/results/*')).convert('RGBA')
+    os.system('rm -r Real-ESRGAN/results/*') # empty the folder
+    
+    
+    # figure out color
+    # cleared_imgs/macaron.png" # can be an img object
+    matchcolor = color_matching(centerpiece_image)
+
+    # add images
+    numrow_txt = len(input_txt)
+    canvasobj, placed_left, limits, filled_img_w = add_image_to_canvas(centerpiece_image,
+                                                                       numrow_txt,
+                                                                       matchcolor)
+    # add text
+    add_txt_to_canvas(canvasobj, output_path, filled_img_width=filled_img_w,
+                      input_txt=input_txt, size_limits=limits, object_placed_left=True)
+
 
 def main():
     return
+
 
 if __name__ == "__main__":
     main()

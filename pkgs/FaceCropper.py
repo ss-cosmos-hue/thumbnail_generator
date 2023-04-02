@@ -1,7 +1,8 @@
+from PIL import Image
+
 
 def crop(percent_bottom, image_path):
     # Importing Image class from PIL module
-    from PIL import Image
     OUTPUT_PATH = 'output/cropped.png'
     # Opens a image in RGB mode
     im = Image.open(image_path)

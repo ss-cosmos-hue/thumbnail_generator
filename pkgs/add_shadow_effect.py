@@ -18,12 +18,13 @@ def add_shade(org_image, shade, stride=(2, 2)):
     expanded = np.zeros((h_org+h_str, w_org+w_str, 4))
     org_image_copy = np.copy(org_image)
     expanded[-h_org:, -w_org:] = np.copy(shade)
-    expanded[:h_org, :w_org][org_image_copy[..., -1] > 0] = org_image_copy[org_image_copy[..., -1] > 0]
+    expanded[:h_org, :w_org][org_image_copy[..., -1] >
+                             0] = org_image_copy[org_image_copy[..., -1] > 0]
 
     return expanded
 
 
-def preprocess_image(imgpath, outputpath):
+def preprocess_image(imgpath):
     # so far only png file is tested
     image = Image.open(imgpath)
     # cutout outline
@@ -31,8 +32,12 @@ def preprocess_image(imgpath, outputpath):
     # cutout transparent part
     cropped_image = image_cutout.crop(image_cutout.getbbox())
     # plt.imshow(cropped_image)
+    return cropped_image
+
+
+def shadow_adder(scaled_image, output_path="shadow.png"):
     # make sure that (0...1) scale is used
-    image_array = np.array(cropped_image)
+    image_array = np.array(scaled_image)
     if np.issubdtype(image_array.dtype, np.integer):
         image_array = image_array/255.0
     original_image = image_array
@@ -45,14 +50,13 @@ def preprocess_image(imgpath, outputpath):
     # img_obj.save(outputpath)
     img_obj = Image.fromarray(
         (image_with_shade*255).astype(np.uint8), mode="RGBA")
-    img_obj.save(outputpath)
+    img_obj.save(output_path)
 
-    return image_with_shade  # numpy array
+    return image_with_shade
 
 
 def main():
     preprocess_image()
-    return
 
 
 if __name__ == "__main__":

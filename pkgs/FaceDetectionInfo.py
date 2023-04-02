@@ -1,8 +1,9 @@
+import json
+import requests
+
+
 # Returns relative y-coord for bottom of face, and confidence in face-detection accuracy
 def bottom_detector(image_path):
-    import json
-    import requests
-
     headers = {"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZmYzODY4MTctMDlmYy00NjBlLTljOWItMjQ2ZGYzYmE0NzliIiwidHlwZSI6ImFwaV90b2tlbiJ9.WOwzUmc3IkbtDxHSrUiLdTYE7wZS2COY5vC8hsmX3_A"}
 
     url = "https://api.edenai.run/v2/image/face_detection"

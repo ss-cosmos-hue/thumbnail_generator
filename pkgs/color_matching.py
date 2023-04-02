@@ -10,10 +10,9 @@ def load_colorpairs(path_to_excel="colormatch.xlsx"):
     colorpairs = np.array(pd_excel_handler)
     return colorpairs
 
-
-def color_matcher(pixel, colorpairs):
-    """color_matching
-
+def matcher(pixel, colorpairs):
+    """
+    color_matching
     Args:
         pixel (an array of 3): RGB
         colorpairs (data): 2darray
@@ -26,8 +25,7 @@ def color_matcher(pixel, colorpairs):
     return np.copy(colorpairs[pair_idx][4:7])
 
 
-def choose_representative_pixel(inputpath):  # using clustering
-    imgobj = Image.open(inputpath)
+def choose_representative_pixel(imgobj):  # using clustering
     imgarr = np.array(imgobj)
     if not np.issubdtype(imgarr.dtype, np.integer):
         imgarr = (imgarr*255).astype(np.uint8)
@@ -44,17 +42,23 @@ def choose_representative_pixel(inputpath):  # using clustering
     return (representative//1).astype(np.uint8)
 
 
+def color_matching(imgobj):
+    representative = choose_representative_pixel(imgobj)
+    colorpairs = load_colorpairs()
+    matchcolor = matcher(representative,colorpairs)
+    return matchcolor
+
 def main():
     representative = choose_representative_pixel("cleared_imgs/macaron.png")
     colorpairs = load_colorpairs()
-    matchcolor = color_matcher(representative, colorpairs)
-    figure, ax = plt.subplots(2)
-    # you should comment out this
-    print(representative, matchcolor)
-    ax[0].imshow([[representative]]*3)
-    ax[1].imshow([[matchcolor]]*3)
-    # figure.show()
-    figure.savefig("color_matching.jpg")
+    matchcolor = matcher(representative, colorpairs)
+    # figure, ax = plt.subplots(2)
+    # # you should comment out this
+    # print(representative, matchcolor)
+    # ax[0].imshow([[representative]]*3)
+    # ax[1].imshow([[matchcolor]]*3)
+    # # figure.show()
+    # figure.savefig("color_matching.jpg")
     return
 
 

@@ -13,7 +13,7 @@ except OSError:
     pass
 
 
-def shift_contrast(im: Image, color = None):
+def shift_contrast(im: Image, color=None):
     data = np.array(im)
     print(data.shape)
     if color is None:
@@ -38,12 +38,12 @@ def shift_contrast(im: Image, color = None):
 
     return Image.fromarray(data), color
 
-def transfer_to_blank_canvas(im: Image, model: Image):
-    model_outline = model.getbbox()
-    clear_image = im.crop(model_outline)
-    img = Image.new('RGBA', model.size, (255, 0, 0, 0))
-    img.paste(clear_image, (0, 0), clear_image)
-    return img
+
+def upscale_image(scale_factor):
+    cmd = ("cd Real-ESRGAN; wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.2.4/RealESRGAN_x4plus_anime_6B.pth -P weights; "
+           "python3 inference_realesrgan.py -n RealESRGAN_x4plus_anime_6B -i inputs --outscale", scale_factor, "--fp32")
+    os.system(cmd)
+
 
 def start(input_path, text):
     input = Image.open(input_path).convert('RGBA')
@@ -80,7 +80,7 @@ def start(input_path, text):
     centerpiece_image = centerpiece_image.resize(
         (centerpiece_width, centerpiece_height))
     thumbnail_image.paste(centerpiece_image, (centerpiece_x,
-                        centerpiece_y), centerpiece_image)
+                                              centerpiece_y), centerpiece_image)
 
     # Determine text box size and position
     text_x = int(thumbnail_image.width / 2)
@@ -102,7 +102,8 @@ def start(input_path, text):
     font_size = min(max_font_size, 36)
 
     # Set font and text color
-    draw.text((text_x, text_y), '\n'.join(text_lines), fill=(0, 0, 0), font=font)
+    draw.text((text_x, text_y), '\n'.join(
+        text_lines), fill=(0, 0, 0), font=font)
 
     # Save thumbnail image
     thumbnail_image.save('thumbnails/thumbnail.png')
