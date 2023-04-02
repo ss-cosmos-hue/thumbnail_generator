@@ -62,16 +62,13 @@ def place_image(canvas, processed_img, numrow, margin_h=1, margin_w=1):
         right_corners = calc_rightcorners(filled_img_arr)
         right_limits = calc_maxspace_for_text(
             numrow, canvas_size, right_corners)
-        for _ in right_limits:
-            _ += margin_w
         return canvas, placed_left, right_limits, filled_img_h
+    
     else:
         canvas[-filled_img_h-margin_h:-margin_h, -filled_img_w-margin_w:-
                margin_w][filled_img_arr[..., -1] > 125] = filled_img_arr[filled_img_arr[..., -1] > 125]
         left_corners = calc_leftcorners(filled_img_arr)
         left_limits = calc_maxspace_for_text(numrow, canvas_size, left_corners)
-        for _ in left_limits:
-            _ += margin_h
 
         return canvas, placed_left, left_limits, filled_img_w
 

@@ -34,7 +34,7 @@ def add_txt_to_canvas(canvas, output_path,
     assert 1 <= numrow <= 3
     # font = ImageFont.truetype('/System/Library/Fonts/Supplemental/arial.ttf', size=36)
     # make a blank image for the text, initialized to transparent text color
-    txt = Image.new("RGBA", canvas.size, (255, 255, 255, 40))
+    txt = Image.new("RGBA", canvas.size, (255, 255, 255, 120))
 
     # get a font
     # get a drawing context

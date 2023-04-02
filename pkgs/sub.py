@@ -20,7 +20,7 @@ def thumbnail_generator(input_txt, input_path, output_path):
     except OSError:
         pass
 
-    # cutout
+    # remove background
     input = Image.open(input_path).convert('RGBA')
     intermediate, color = shift_contrast(input)
     intermediate = intermediate.filter(ImageFilter.FIND_EDGES)
@@ -30,31 +30,38 @@ def thumbnail_generator(input_txt, input_path, output_path):
     output, _ = shift_contrast(output, color)
     output.save(INTERMEDIATE_FRAME_PATH)
 
-    # crop
+    # crop above shoulders
     image_path = "output/frame.png"
     crop(bottom_value_decider(image_path), image_path)
 
-    # detection
+    # crop extra space
     image_path = 'output/cropped.png'
     cropped_img = preprocess_image(image_path)
-    cropped_img.save('shadow.png')
+
+    # calculate ratio
+    thumbnail_image = Image.new('RGB', (1280, 720), (255, 255, 255))
+    centerpiece_image = Image.open(image_path).convert('RGBA')
+    width, height = centerpiece_image.size
+    ratio = thumbnail_image.height / height
 
     # more focus (upscaling)
+    centerpiece_image.save('shadow.png')
     os.system('mv shadow.png Real-ESRGAN/inputs')
-    thumbnail_image = Image.new('RGB', (1280, 720), (255, 255, 255))
 
-    centerpiece_image = Image.open(image_path).convert('RGBA')
-    _, height = centerpiece_image.size
-    ratio = thumbnail_image.height / height
-    if ratio > 1:  # Only if image needs to be upscaled
+    if ratio > 1.5:  # Only if image needs to be upscaled
         upscale_image(str(ratio))
 
-    # Add shadow
+    # add shadow
     shadow_out = Image.open('Real-ESRGAN/results/shadow_out.png') if os.path.exists(
         'Real-ESRGAN/results/shadow_out.png') else cropped_img
     centerpiece_image = shadow_adder(shadow_out).convert('RGBA')
     os.system('rm -r Real-ESRGAN/inputs/*')
     os.system('rm -r Real-ESRGAN/results/*')
+
+    # resize
+    centerpiece_height = int(thumbnail_image.height)
+    centerpiece_width = int(width * ratio)
+    centerpiece_image = centerpiece_image.resize((centerpiece_width, centerpiece_height))
 
     # figure out color
     # cleared_imgs/macaron.png" # can be an img object
@@ -72,7 +79,7 @@ def thumbnail_generator(input_txt, input_path, output_path):
 
 def main():
     dir = pathlib.Path(__file__).parents[1]
-    input_path = os.path.join(dir, "images", "dora.png")
+    input_path = os.path.join(dir, "images", "mario.png")
     thumbnail_generator("Hello World", input_path,
                         os.path.join(dir, "thumbnails/thumbnail.png"))
 
