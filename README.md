@@ -1,6 +1,9 @@
 # thumbnail_generator
 ## Hackprinceton2023 spring
 
+https://devpost.com/software/fabulous-5
+
+## Getting started
 python3 -r requirements.txt  
 pip3 install scikit-learn  
 
