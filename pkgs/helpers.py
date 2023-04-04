@@ -41,7 +41,7 @@ def shift_contrast(im: Image, color=None):
 
 def upscale_image(scale_factor):
     cmd = ("cd Real-ESRGAN; wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.2.4/RealESRGAN_x4plus_anime_6B.pth -P weights; "
-           "python3 inference_realesrgan.py -n RealESRGAN_x4plus_anime_6B -i inputs --outscale", scale_factor, "--fp32")
+           f"python3 inference_realesrgan.py -n RealESRGAN_x4plus_anime_6B -i inputs --outscale {scale_factor} --fp32")
     os.system(cmd)
 
 

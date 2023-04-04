@@ -32,15 +32,18 @@ def calc_leftcorners(imgarr):
 
 def calc_maxspace_for_text(numrow,canvas_size,rightcorners):
     canvas_h,canvas_w = canvas_size[:2]
+    # print("*",rightcorners,numrow,canvas_h)
     res = np.zeros((numrow))
     for i in range(numrow):
-        res[i] = np.max(rightcorners[(canvas_h//numrow)*i:(canvas_h//numrow)*(i+1)])        
+        if len(rightcorners[(canvas_h//numrow)*i:(canvas_h//numrow)*(i+1)])!= 0:
+            res[i] = np.max(rightcorners[(canvas_h//numrow)*i:(canvas_h//numrow)*(i+1)])        
     return res
 
-def place_image(canvas,processed_img,numrow=3,margin_h=1,margin_w=1):
+def place_image(canvas,processed_img,numrow,margin_h=1,margin_w=1):
     canvas_size = canvas.shape
     processed_img_size = np.array((np.array(processed_img)).shape)
     prop = min(canvas_size[0]//processed_img_size[0],canvas_size[1]//processed_img_size[1])
+    # prop = 1
     filled_img_size = processed_img_size[:2]*prop
     # print(tuple(filled_img_size),canvas_size[0],)
     filled_img = processed_img.resize(tuple(filled_img_size[::-1]))
@@ -51,14 +54,15 @@ def place_image(canvas,processed_img,numrow=3,margin_h=1,margin_w=1):
     filled_img_h,filled_img_w = filled_img_size
     
     if placed_left == True:
-        canvas[-filled_img_h-margin_h:-margin_h,margin_w:filled_img_w+margin_w][filled_img_arr[...,-1]>125] = filled_img_arr[filled_img_arr[...,-1]>125]
+        canvas[-filled_img_h-margin_h:-margin_h,margin_w:filled_img_w+margin_w][filled_img_arr[...,-1]>20] = filled_img_arr[filled_img_arr[...,-1]>20]
+        # canvas[-filled_img_h-margin_h:-margin_h,margin_w:filled_img_w+margin_w] = np.array(Image.alpha_composite(Image.fromarray(filled_img_arr,"RGBA"),Image.fromarray(canvas[-filled_img_h-margin_h:-margin_h,margin_w:filled_img_w+margin_w],"RGBA")))
         right_corners = calc_rightcorners(filled_img_arr)
         right_limits= calc_maxspace_for_text(numrow,canvas_size,right_corners)
         for _ in right_limits:
             _+=margin_w
         return canvas,placed_left,right_limits,filled_img_h
     else:
-        canvas[-filled_img_h-margin_h:-margin_h,-filled_img_w-margin_w:-margin_w][filled_img_arr[...,-1]>125] = filled_img_arr[filled_img_arr[...,-1]>125]        
+        canvas[-filled_img_h-margin_h:-margin_h,-filled_img_w-margin_w:-margin_w][filled_img_arr[...,-1]>20] = filled_img_arr[filled_img_arr[...,-1]>20]        
         left_corners = calc_leftcorners(filled_img_arr)
         left_limits = calc_maxspace_for_text(numrow,canvas_size,left_corners)
         for _ in left_limits:
@@ -67,7 +71,7 @@ def place_image(canvas,processed_img,numrow=3,margin_h=1,margin_w=1):
         return canvas,placed_left,left_limits,filled_img_w
     
 # main part of this file
-def add_image_to_canvas(img_obj, numrow_txt, backgroundcolor=[0, 0, 0],  output_path="canvas/canvas.png"):
+def add_image_to_canvas(img_obj, numrow_txt, backgroundcolor=[0, 0, 0]):
     numrow = numrow_txt
     canvas_size = config.canvas_size  # height and width
     # image object of pillow#if you are to add edge, edge is already added
@@ -83,10 +87,9 @@ def add_image_to_canvas(img_obj, numrow_txt, backgroundcolor=[0, 0, 0],  output_
     if not np.issubdtype(processed_img_arr.dtype, np.integer):
         print("converted type of array")
         processed_img_arr = (processed_img_arr*255.0).astype(np.uint8)
-    canvas, placed_left, limits, filled_img_w = place_image(
-        canvas, processed_img)
+    canvas, placed_left, limits, filled_img_w = place_image(canvas, processed_img,numrow_txt)
     canvasobj = Image.fromarray(canvas.astype(np.uint8), mode="RGBA")
-    canvasobj.save(output_path)
+    # canvasobj.save(output_path)
     return canvasobj, placed_left, limits, filled_img_w
 
 

@@ -11,7 +11,7 @@ from helpers import shift_contrast, remove, crop, bottom_value_decider, upscale_
 INTERMEDIATE_FRAME_PATH = "output/frame.png"
 
 
-def thumbnail_generator(input_txt, input_path, path_to_cleared_img, path_to_canvas_without_img, output_path):
+def thumbnail_generator(input_txt, input_path, output_path):
     # cutout
     input = Image.open(input_path).convert('RGBA')
     intermediate, color = shift_contrast(input)
@@ -42,9 +42,14 @@ def thumbnail_generator(input_txt, input_path, path_to_cleared_img, path_to_canv
         upscale_image(str(ratio))
     os.system('rm -r Real-ESRGAN/inputs/*') # empty the folder
 
+
+
     # Add shadow
-    centerpiece_image = shadow_adder(Image.open('Real-ESRGAN/results/*')).convert('RGBA')
+    shadow_out = Image.open('Real-ESRGAN/results/shadow_out.png')if os.path.exists('Real-ESRGAN/results/shadow_out.png') else cropped_img
+    
+    centerpiece_image = shadow_adder(shadow_out).convert('RGBA')
     os.system('rm -r Real-ESRGAN/results/*') # empty the folder
+    
     
     
     # figure out color
@@ -52,7 +57,7 @@ def thumbnail_generator(input_txt, input_path, path_to_cleared_img, path_to_canv
     matchcolor = color_matching(centerpiece_image)
 
     # add images
-    numrow_txt = len(input_txt)
+    numrow_txt = len(input_txt.split())
     canvasobj, placed_left, limits, filled_img_w = add_image_to_canvas(centerpiece_image,
                                                                        numrow_txt,
                                                                        matchcolor)
@@ -62,6 +67,8 @@ def thumbnail_generator(input_txt, input_path, path_to_cleared_img, path_to_canv
 
 
 def main():
+    cwd = os.getcwd()
+    thumbnail_generator("Sprite!", cwd+"/images/strawberry.png", cwd+"/images/cleared.png",cwd+"/images/canvas_without.png", cwd+"/images/out.png")
     return
 
 

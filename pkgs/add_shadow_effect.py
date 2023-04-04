@@ -50,9 +50,10 @@ def shadow_adder(scaled_image, output_path="shadow.png"):
     # img_obj.save(outputpath)
     img_obj = Image.fromarray(
         (image_with_shade*255).astype(np.uint8), mode="RGBA")
-    img_obj.save(output_path)
+    # img_obj.save(output_path)
 
-    return image_with_shade
+    # return image_with_shade
+    return img_obj
 
 
 def main():

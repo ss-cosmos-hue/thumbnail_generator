@@ -6,7 +6,7 @@ import sys
 import shutil
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'pkgs'))
-from pkgs.helpers import start
+from pkgs.sub import thumbnail_generator
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
@@ -31,12 +31,12 @@ def generate():
         try:
             filename = secure_filename(file.filename)
             input_path = os.path.join(UPLOAD_FOLDER, filename)
-            file.save(input_path)
-            start(input_path, text)
+            file.save(input_path)   
+            thumbnail_generator(text, input_path, "thumbnails/thumbnail.png")
 
             # clear input folder
             shutil.rmtree(UPLOAD_FOLDER)
-            os.makedirs(UPLOAD_FOLDER)
+            os.makedirs(UPLOAD_FOLDER)  
 
             return jsonify({'status': 'success'}), 200
         except Exception as e:
@@ -53,4 +53,4 @@ def thumbnail():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=7778)
