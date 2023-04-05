@@ -48,7 +48,7 @@ def thumbnail_generator(input_txt, input_path, output_path):
     centerpiece_image.save('shadow.png')
     os.system('mv shadow.png Real-ESRGAN/inputs')
 
-    if ratio > 1.5:  # Only if image needs to be upscaled
+    if ratio > 1:  # Only if image needs to be upscaled
         upscale_image(str(ratio))
     os.system('rm -r Real-ESRGAN/inputs/*') # empty the folder
 
