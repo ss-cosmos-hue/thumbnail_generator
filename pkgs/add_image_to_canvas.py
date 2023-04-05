@@ -31,22 +31,20 @@ def calc_leftcorners(imgarr):
             a[i] = nontransindices[-1]+1  # the size of margin wouldn't hurt
     return a
 
-
-def calc_maxspace_for_text(numrow, canvas_size, corners):
-    canvas_h, canvas_w = canvas_size[:2]
+def calc_maxspace_for_text(numrow,canvas_size,rightcorners):
+    canvas_h,canvas_w = canvas_size[:2]
+    # print("*",rightcorners,numrow,canvas_h)
     res = np.zeros((numrow))
     for i in range(numrow):
-        if len(corners[(canvas_h//numrow) * i:(canvas_h//numrow)*(i+1)]) != 0:
-            res[i] = np.max(corners[(canvas_h//numrow) *
-                            i:(canvas_h//numrow)*(i+1)])
+        if len(rightcorners[(canvas_h//numrow)*i:(canvas_h//numrow)*(i+1)])!= 0:
+            res[i] = np.max(rightcorners[(canvas_h//numrow)*i:(canvas_h//numrow)*(i+1)])        
     return res
 
-
-def place_image(canvas, processed_img, numrow, margin_h=1, margin_w=1):
+def place_image(canvas,processed_img,numrow,margin_h=1,margin_w=1):
     canvas_size = canvas.shape
     processed_img_size = np.array((np.array(processed_img)).shape)
-    prop = min(canvas_size[0]//processed_img_size[0],
-               canvas_size[1]//processed_img_size[1])
+    prop = min(canvas_size[0]//processed_img_size[0],canvas_size[1]//processed_img_size[1])
+    # prop = 1
     filled_img_size = processed_img_size[:2]*prop
     # print(tuple(filled_img_size),canvas_size[0],)
     filled_img = processed_img.resize(tuple(filled_img_size[::-1]))

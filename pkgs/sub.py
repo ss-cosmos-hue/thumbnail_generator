@@ -48,29 +48,26 @@ def thumbnail_generator(input_txt, input_path, output_path):
     centerpiece_image.save('shadow.png')
     os.system('mv shadow.png Real-ESRGAN/inputs')
 
-    if ratio > 1.5:  # Only if image needs to be upscaled
+    if ratio > 1:  # Only if image needs to be upscaled
         upscale_image(str(ratio))
+    os.system('rm -r Real-ESRGAN/inputs/*') # empty the folder
 
-    # add shadow
-    shadow_out = Image.open('Real-ESRGAN/results/shadow_out.png') if os.path.exists(
-        'Real-ESRGAN/results/shadow_out.png') else cropped_img
+    # Add shadow
+    shadow_out = Image.open('Real-ESRGAN/results/shadow_out.png')if os.path.exists('Real-ESRGAN/results/shadow_out.png') else cropped_img
+    
     centerpiece_image = shadow_adder(shadow_out).convert('RGBA')
-    os.system('rm -r Real-ESRGAN/inputs/*')
-    os.system('rm -r Real-ESRGAN/results/*')
-
-    # resize
-    centerpiece_height = int(thumbnail_image.height)
-    centerpiece_width = int(width * ratio)
-    centerpiece_image = centerpiece_image.resize((centerpiece_width, centerpiece_height))
-
+    os.system('rm -r Real-ESRGAN/results/*') # empty the folder
+    
+    
+    
     # figure out color
     # cleared_imgs/macaron.png" # can be an img object
     matchcolor = color_matching(centerpiece_image)
 
     # add images
-    numrow = len(input_txt.split(" "))
+    numrow_txt = len(input_txt.split())
     canvasobj, placed_left, limits, filled_img_w = add_image_to_canvas(centerpiece_image,
-                                                                       numrow,
+                                                                       numrow_txt,
                                                                        matchcolor)
     # add text
     add_txt_to_canvas(canvasobj, output_path, filled_img_w,
@@ -78,10 +75,9 @@ def thumbnail_generator(input_txt, input_path, output_path):
 
 
 def main():
-    dir = pathlib.Path(__file__).parents[1]
-    input_path = os.path.join(dir, "images", "mario.png")
-    thumbnail_generator("Hello World", input_path,
-                        os.path.join(dir, "thumbnails/thumbnail.png"))
+    cwd = os.getcwd()
+    thumbnail_generator("Sprite!", cwd+"/images/strawberry.png", cwd+"/images/cleared.png",cwd+"/images/canvas_without.png", cwd+"/images/out.png")
+    return
 
 
 if __name__ == "__main__":

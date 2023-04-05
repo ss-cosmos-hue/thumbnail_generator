@@ -34,8 +34,8 @@ def add_txt_to_canvas(canvas, output_path,
     assert 1 <= numrow <= 3
     # font = ImageFont.truetype('/System/Library/Fonts/Supplemental/arial.ttf', size=36)
     # make a blank image for the text, initialized to transparent text color
-    txt = Image.new("RGBA", canvas.size, (255, 255, 255, 120))
-
+    txt = Image.new("RGBA", canvas.size, (255, 255, 255, 40))
+    
     # get a font
     # get a drawing context
     d = ImageDraw.Draw(txt)
@@ -54,11 +54,10 @@ def add_txt_to_canvas(canvas, output_path,
         fontsize += 2
         font = ImageFont.truetype("Arial.ttf", fontsize)
         l, t, r, b = font.getbbox(word)
-    font = ImageFont.truetype("Arial.ttf", fontsize-2)
-
+    font = ImageFont.truetype("Arial.ttf", fontsize-2)#updated
     height_unit = np.abs(t-b)
-    heights = (np.linspace(canvas_h//2 - numrow*height_unit//2-height_unit//2, canvas_h//2 -
-               numrow*height_unit//2 + numrow*height_unit-height_unit, num=numrow)).astype(np.int16)
+    heights = (np.linspace(canvas_h//2-numrow*height_unit//2-height_unit//2, canvas_h//2 -
+               numrow*height_unit//2+numrow*height_unit-height_unit, num=numrow)).astype(np.int16)#updated
 
     for i in range(numrow):
         word = words[i]
@@ -68,11 +67,11 @@ def add_txt_to_canvas(canvas, output_path,
 
         if not object_placed_left:  # no meaaning
             d.text((10, heights[i]), word, font=font,
-                   fill=(255, 255, 255, 200))
+                   fill=(255, 255, 255, 20))
 
         else:
-            d.text(((canvas_w+size_limits[i]-5*(r-l)//4)//2, heights[i]),
-                   word, font=font, fill=(255, 255, 255, 200))
+            d.text(((canvas_w+size_limits[i]-6*(r-l)//5)//2, heights[i]),#updated
+                   word, font=font, fill=(255, 255, 255, 200),stroke_width=7, stroke_fill=(10, 10, 10, 200))
             # offset from left, offset from top
     out = Image.alpha_composite(canvas, txt)
     out.save(output_path)
