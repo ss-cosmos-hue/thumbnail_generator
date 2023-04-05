@@ -1,4 +1,4 @@
-#configuration
+# configuration
 from PIL import Image
 import numpy as np
 from configuration import config
@@ -13,21 +13,22 @@ from configuration import config
 
 
 def calc_rightcorners(imgarr):
-    h,w = np.shape(imgarr)[:2]
+    h, w = np.shape(imgarr)[:2]
     a = [0]*h
     for i in range(h):
-        nontransindices = np.where(imgarr[i][...,3]!=0)[0]
+        nontransindices = np.where(imgarr[i][..., 3] != 0)[0]
         if len(nontransindices) != 0:
-            a[i] = nontransindices[-1]+1#the size of margin wouldn't hurt
+            a[i] = nontransindices[-1]+1  # the size of margin wouldn't hurt
     return a
 
+
 def calc_leftcorners(imgarr):
-    h,w = np.shape(imgarr)[:2]
+    h, w = np.shape(imgarr)[:2]
     a = [0]*h
     for i in range(h):
-        nontransindices = np.where(imgarr[i][...,3]!=0)[0]
+        nontransindices = np.where(imgarr[i][..., 3] != 0)[0]
         if len(nontransindices) != 0:
-            a[i] = nontransindices[-1]+1#the size of margin wouldn't hurt
+            a[i] = nontransindices[-1]+1  # the size of margin wouldn't hurt
     return a
 
 def calc_maxspace_for_text(numrow,canvas_size,rightcorners):
@@ -48,31 +49,31 @@ def place_image(canvas,processed_img,numrow,margin_h=1,margin_w=1):
     # print(tuple(filled_img_size),canvas_size[0],)
     filled_img = processed_img.resize(tuple(filled_img_size[::-1]))
     filled_img_arr = np.array(filled_img)
-    placed_left = True#we need to update according to the orientation
+    placed_left = True  # we need to update according to the orientation
     placed_right = not(placed_left)
     assert placed_left != placed_right
-    filled_img_h,filled_img_w = filled_img_size
-    
-    if placed_left == True:
-        canvas[-filled_img_h-margin_h:-margin_h,margin_w:filled_img_w+margin_w][filled_img_arr[...,-1]>20] = filled_img_arr[filled_img_arr[...,-1]>20]
-        # canvas[-filled_img_h-margin_h:-margin_h,margin_w:filled_img_w+margin_w] = np.array(Image.alpha_composite(Image.fromarray(filled_img_arr,"RGBA"),Image.fromarray(canvas[-filled_img_h-margin_h:-margin_h,margin_w:filled_img_w+margin_w],"RGBA")))
-        right_corners = calc_rightcorners(filled_img_arr)
-        right_limits= calc_maxspace_for_text(numrow,canvas_size,right_corners)
-        for _ in right_limits:
-            _+=margin_w
-        return canvas,placed_left,right_limits,filled_img_h
-    else:
-        canvas[-filled_img_h-margin_h:-margin_h,-filled_img_w-margin_w:-margin_w][filled_img_arr[...,-1]>20] = filled_img_arr[filled_img_arr[...,-1]>20]        
-        left_corners = calc_leftcorners(filled_img_arr)
-        left_limits = calc_maxspace_for_text(numrow,canvas_size,left_corners)
-        for _ in left_limits:
-            _+=margin_h
+    filled_img_h, filled_img_w = filled_img_size
 
-        return canvas,placed_left,left_limits,filled_img_w
+    if placed_left == True:
+        canvas[-filled_img_h-margin_h:-margin_h, margin_w:filled_img_w +
+               margin_w][filled_img_arr[..., -1] > 125] = filled_img_arr[filled_img_arr[..., -1] > 125]
+        right_corners = calc_rightcorners(filled_img_arr)
+        right_limits = calc_maxspace_for_text(
+            numrow, canvas_size, right_corners)
+        return canvas, placed_left, right_limits, filled_img_h
     
+    else:
+        canvas[-filled_img_h-margin_h:-margin_h, -filled_img_w-margin_w:-
+               margin_w][filled_img_arr[..., -1] > 125] = filled_img_arr[filled_img_arr[..., -1] > 125]
+        left_corners = calc_leftcorners(filled_img_arr)
+        left_limits = calc_maxspace_for_text(numrow, canvas_size, left_corners)
+
+        return canvas, placed_left, left_limits, filled_img_w
+
 # main part of this file
-def add_image_to_canvas(img_obj, numrow_txt, backgroundcolor=[0, 0, 0]):
-    numrow = numrow_txt
+
+
+def add_image_to_canvas(img_obj, numrow, backgroundcolor=[0, 0, 0]):
     canvas_size = config.canvas_size  # height and width
     # image object of pillow#if you are to add edge, edge is already added
     processed_img = img_obj
@@ -87,9 +88,9 @@ def add_image_to_canvas(img_obj, numrow_txt, backgroundcolor=[0, 0, 0]):
     if not np.issubdtype(processed_img_arr.dtype, np.integer):
         print("converted type of array")
         processed_img_arr = (processed_img_arr*255.0).astype(np.uint8)
-    canvas, placed_left, limits, filled_img_w = place_image(canvas, processed_img,numrow_txt)
+    canvas, placed_left, limits, filled_img_w = place_image(
+        canvas, processed_img, numrow)
     canvasobj = Image.fromarray(canvas.astype(np.uint8), mode="RGBA")
-    # canvasobj.save(output_path)
     return canvasobj, placed_left, limits, filled_img_w
 
 
@@ -110,5 +111,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-

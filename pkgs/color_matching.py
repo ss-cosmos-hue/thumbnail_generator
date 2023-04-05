@@ -10,6 +10,7 @@ def load_colorpairs(path_to_excel="colormatch.xlsx"):
     colorpairs = np.array(pd_excel_handler)
     return colorpairs
 
+
 def matcher(pixel, colorpairs):
     """
     color_matching
@@ -45,8 +46,9 @@ def choose_representative_pixel(imgobj):  # using clustering
 def color_matching(imgobj):
     representative = choose_representative_pixel(imgobj)
     colorpairs = load_colorpairs()
-    matchcolor = matcher(representative,colorpairs)
+    matchcolor = matcher(representative, colorpairs)
     return matchcolor
+
 
 def main():
     representative = choose_representative_pixel("cleared_imgs/macaron.png")

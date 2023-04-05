@@ -4,3 +4,6 @@ Pillow==9.3.0
 numpy==1.23.5
 matplotlib==3.6.2
 rembg==2.0.32
+basicsr==1.4.2
+threadpoolctl==3.1.0
+openpyxl==3.1.2
