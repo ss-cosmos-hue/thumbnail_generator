@@ -3,6 +3,24 @@
 
 https://devpost.com/software/fabulous-5
 
+## Use cases
+<p>
+    <img src="images/boy_gun.png" width="30%", height="30%">
+    <img src="output/boy_gun.png" width="30%", height="30%">
+</p>
+<p>
+    <img src="images/toad.png" width="30%", height="30%">
+    <img src="output/toad.png" width="30%", height="30%">
+</p>
+<p>
+    <img src="images/dora.png" width="30%", height="30%">
+    <img src="output/dora.png" width="30%", height="30%">
+</p>
+<p>
+    <img src="images/macaron.png" width="30%", height="30%">
+    <img src="output/macaron.png" width="30%", height="30%">
+</p>
+
 ## Getting started
 1. `python3 -r requirements.txt`  
 2. `pip3 install scikit-learn`  
